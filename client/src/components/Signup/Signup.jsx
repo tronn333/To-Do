@@ -7,7 +7,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', 
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -46,29 +46,31 @@ export default function Signup() {
   const [email, setemail] = useState('')
   const [name, setname] = useState('')
   const [password, setpassword] = useState('')
-  const formHandler = async (e)=>{
+  const formHandler = async (e) => {
     e.preventDefault()
     const response = await fetch('http://localhost:3001/signup',
-    {method: 'POST',
-    headers:{
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({email,name,password})
-  })
-  const serverResponse = await response.json()
-  if (response.status === 200) {
-     localStorage.setItem('token', `${serverResponse.accessToken}`)
-     history.push('/game')  } 
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, name, password })
+      })
+    const serverResponse = await response.json()
+    if (response.status === 200) {
+      localStorage.setItem('token', `${serverResponse.accessToken}`)
+      history.push('/')
+    }
   }
-     const emailHandler =  (e)=>{
-      setemail(() => e.target.value)
-     }
-     const nameHandler =  (e)=>{
-      setname(() => e.target.value)
-     } 
-     const passwordHandler =  (e)=>{
-      setpassword(() => e.target.value)
-     } 
+  const emailHandler = (e) => {
+    setemail(() => e.target.value)
+  }
+  const nameHandler = (e) => {
+    setname(() => e.target.value)
+  }
+  const passwordHandler = (e) => {
+    setpassword(() => e.target.value)
+  }
 
   return (
     <Container component="main" maxWidth="xs">

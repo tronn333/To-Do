@@ -37,11 +37,12 @@ router.route('/signin')
     console.log(req.body);
     const { email, password } = req.body
     if (email && password) {
+      console.log(email);
       const currentUser = await User.findOne({ email })
       if (currentUser.password === password) {
         const tokenUser = { ...currentUser }
         const accessToken = generateAccessToken(tokenUser)
-        return res.json({ accessToken: accessToken, name: currentUser.name, points: currentUser.points })
+        return res.json({ accessToken: accessToken, name: currentUser.name })
       }
       return res.sendStatus(401);
     }

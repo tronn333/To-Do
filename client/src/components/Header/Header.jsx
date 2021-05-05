@@ -23,20 +23,26 @@ export default function Header() {
   const dispatch = useDispatch()
   const classes = useStyles();
   useEffect(() => {
+
     (async () => {
-      const response = await fetch('http://localhost:3001/user', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem('token')}`
-        },
-      })
-      if (response.status === 200) {
-        const serverResponse = await response.json()
-        dispatch({ type: 'LOGIN_USER', payload: serverResponse })
+      if (localStorage.getItem('token')) {
+        const response = await fetch('http://localhost:3001/user', {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem('token')}`
+          },
+        })
+        if (response.status === 200) {
+          const serverResponse = await response.json()
+          dispatch({ type: 'LOGIN_USER', payload: serverResponse })
+        }
       }
     })()
   }, [])
+  const buttonLogoutHandler = () => {
+    localStorage.removeItem('token')
+  }
   const user = useSelector((state) => state.user);
 
   return (
@@ -47,7 +53,8 @@ export default function Header() {
             Header
           </Typography>
           {
-            user?.name ? <><Button color="inherit">{user.name}</Button><Button color="inherit">Очки: {user.points}</Button><Link to="/game" style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Играть</Button></Link><Button color="inherit">Выйти</Button></> :
+            user?.name ? <><Button color="inherit">{user.name}</Button><Link to="/game" style={{ textDecoration: 'none', color: 'white' }}>
+              <Button color="inherit">Играть</Button></Link><Button onClick={buttonLogoutHandler} color="inherit">Выйти</Button></> :
               <>
                 <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Войти</Button></Link>
                 <Link to="/signup" style={{ textDecoration: 'none', color: 'white' }}><Button color="inherit">Регистрация</Button></Link>
